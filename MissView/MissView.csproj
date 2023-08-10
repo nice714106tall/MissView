@@ -53,29 +53,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Resources\Languages\language.ja.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>language.ja.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\Languages\language.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>language.resx</DependentUpon>
-	  </Compile>
 	  <Compile Update="Views\Settings\SettingsPage.xaml.cs">
 	    <DependentUpon>SettingsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Resources\Languages\language.ja.resx">
+	  <EmbeddedResource Update="Resources\Languages\UILang.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>language.ja.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
-	  <EmbeddedResource Update="Resources\Languages\language.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>language.Designer.cs</LastGenOutput>
+	    <LastGenOutput>UILang.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
 

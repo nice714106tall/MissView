@@ -12,8 +12,7 @@ public partial class SettingsPage : ContentPage
 
 	void LoadPreferences()
 	{
-		var accts = new Libs.AccountsIO();
-		if (accts.IsAccountsAvailable())
+		if (Libs.AccountsIO.IsAccountsAvailable())
 		{
 			var Accounts = Preferences.Get("Accounts", "");
 			var AccountsJson = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, string>>>(Accounts);
@@ -64,11 +63,20 @@ public partial class SettingsPage : ContentPage
 		else
 		{
 			settingsVerticalStackLayout.Children.Add(new Label { Text = "アカウント情報がありません。" });
-			//add account button
-			var addAccountButton = new Button { Text = " + " };
+			//settingsVerticalStackLayoutに アカウントを追加する ボタンを追加
+			Button AddAccountButton = new()
+			{
+				Text = "アカウントを追加する"
+			};
+			AddAccountButton.Clicked += async (sender, e) => await AddAccountButton_Clicked(sender, e);
+			settingsVerticalStackLayout.Children.Add(AddAccountButton);
 		}
 	}
 
-
+	//addAccountButtonが押されたらAddAccountPageを開く
+	async Task AddAccountButton_Clicked(object sender, EventArgs e)
+	{
+		await Navigation.PushAsync(new AddAccountPage());
+	}
 
 }

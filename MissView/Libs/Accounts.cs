@@ -8,9 +8,9 @@ namespace MissView.Libs
 {
     class AccountsIO
     {
-		public List<Dictionary<string, string>> ShowAccountsList()
+		public static List<Dictionary<string, string>> ShowAccountsList()
         {
-			if (IsAccountsAvailable())
+			if (AccountsIO.IsAccountsAvailable())
 			{
 				var Accounts = Preferences.Get("Accounts", "");
 				var AccountsJson = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, string>>>(Accounts);
@@ -22,14 +22,26 @@ namespace MissView.Libs
 			}
 		}
 
-		public bool IsAccountsAvailable()
+		public static string GetAccountsJson()
+		{
+			if (AccountsIO.IsAccountsAvailable())
+			{
+				return Preferences.Get("Accounts", "");
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public static bool IsAccountsAvailable()
 		{
 			return Microsoft.Maui.Storage.Preferences.ContainsKey("Accounts");
 		}
 
-		public Dictionary<string, string> ShowAccount(int index)
+		public static Dictionary<string, string> ShowAccount(int index)
 		{
-			if (IsAccountsAvailable())
+			if (AccountsIO.IsAccountsAvailable())
 			{
 				var Accounts = Preferences.Get("Accounts", "");
 				var AccountsJson = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, string>>>(Accounts);
@@ -43,12 +55,12 @@ namespace MissView.Libs
 
 		public int LastUsedAccount = -1;
 
-		public void SetLastUsedAccount(int index)
+		public static void SetLastUsedAccount(int index)
 		{
 			Preferences.Set("LastUsedAccount", index);
 		}
 
-		public int GetLastUsedAccount()
+		public static int GetLastUsedAccount()
 		{
 			if (Microsoft.Maui.Storage.Preferences.ContainsKey("LastUsedAccount"))
 			{
@@ -57,6 +69,25 @@ namespace MissView.Libs
 			else
 			{
 				return -1;
+			}
+		}
+
+		public static bool SaveAccount(string content)
+		{
+			try
+			{
+				//既存のアカウントリストを取得し、新規データを末尾に追加する
+				var Accounts = Preferences.Get("Accounts", "");
+				var AccountsJson = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, string>>>(Accounts);
+				var newAccount = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(content);
+				AccountsJson.Add(newAccount);
+				//アカウントリストを保存する
+				Preferences.Set("Accounts", System.Text.Json.JsonSerializer.Serialize(AccountsJson));
+				return true;
+			}
+			catch
+			{
+				return false;
 			}
 		}
 

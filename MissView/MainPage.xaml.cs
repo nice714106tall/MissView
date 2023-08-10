@@ -11,9 +11,9 @@ public partial class MainPage : ContentPage
 	void LoadPreferences()
 	{
 		Libs.AccountsIO acct = new();
-		if(acct.IsAccountsAvailable())
+		if(Libs.AccountsIO.IsAccountsAvailable())
 		{
-			if(acct.GetLastUsedAccount() != -1)
+			if(Libs.AccountsIO.GetLastUsedAccount() != -1)
 			{
 				//show timeline page
 				Navigation.PushAsync(new Views.Timeline.TimelinePage());
@@ -34,6 +34,12 @@ public partial class MainPage : ContentPage
 				})
 			});
 		}
+	}
+
+	void ShowAccountsList()
+	{
+		//SelectAccountsDialogをポップアップ表示する
+		Navigation.PushModalAsync(new Views.Settings.SelectAccountDialog());
 	}
 
 }

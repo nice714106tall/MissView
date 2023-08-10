@@ -5,19 +5,21 @@ public partial class SelectAccountDialog : ContentPage
 	public SelectAccountDialog()
 	{
 		InitializeComponent();
+		ShowAccountsList();
 	}
 
-	void showAccountsList()
+	void ShowAccountsList()
 	{
 		var accts = new Libs.AccountsIO();
-		var AccountsJson = accts.GetAccountsJson();
-		accts.ShowAccountsList().ForEach((Account) =>
+		var AccountsJson = Libs.AccountsIO.GetAccountsJson();
+		int i=1;
+		Libs.AccountsIO.ShowAccountsList().ForEach((Account) =>
 		{
 			Frame acctInfo = new();
 
 			Label TitleLabel = new()
 			{
-				Text = "アカウント情報(" + (AccountsJson.IndexOf(Account) + 1) + ")"
+				Text = "アカウント情報(" + i + ")"
 			};
 			Label InstanceNameLabel = new()
 			{
@@ -53,7 +55,8 @@ public partial class SelectAccountDialog : ContentPage
 				}
 			};
 
-			myVerticalStackLayout.Children.Add(acctInfo);
+			SelectAccountDialogLayout.Children.Add(acctInfo);
+			i++;
 		});
 	}	
 }
