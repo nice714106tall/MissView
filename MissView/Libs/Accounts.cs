@@ -24,9 +24,23 @@ namespace MissView.Libs
 
 		public static string GetAccountsJson()
 		{
-			if (AccountsIO.IsAccountsAvailable())
+			if (IsAccountsAvailable())
 			{
 				return Preferences.Get("Accounts", "");
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public static List<Dictionary<string, string>> GetDeserializedAccounts()
+		{
+			if (AccountsIO.IsAccountsAvailable())
+			{
+				var Accounts = Preferences.Get("Accounts", "");
+				var AccountsJson = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, string>>>(Accounts);
+				return AccountsJson;
 			}
 			else
 			{
@@ -77,10 +91,28 @@ namespace MissView.Libs
 			try
 			{
 				//既存のアカウントリストを取得し、新規データを末尾に追加する
+				List<Dictionary<string, string>> Accounts = ShowAccountsList();
+				Accounts ??= new List<Dictionary<string, string>>();
+				Dictionary<string, string> newAccount = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
+				Accounts.Add(newAccount);
+				//アカウントリストを保存する
+				Preferences.Set("Accounts", System.Text.Json.JsonSerializer.Serialize(Accounts));
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public static bool DeleteAccount(int index)
+		{
+			try
+			{
+				//既存のアカウントリストを取得し、指定されたインデックスのデータを削除する
 				var Accounts = Preferences.Get("Accounts", "");
 				var AccountsJson = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, string>>>(Accounts);
-				var newAccount = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(content);
-				AccountsJson.Add(newAccount);
+				AccountsJson.RemoveAt(index);
 				//アカウントリストを保存する
 				Preferences.Set("Accounts", System.Text.Json.JsonSerializer.Serialize(AccountsJson));
 				return true;
@@ -90,7 +122,5 @@ namespace MissView.Libs
 				return false;
 			}
 		}
-
-
 	}
 }

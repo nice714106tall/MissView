@@ -39,7 +39,7 @@ public partial class MainPage : ContentPage
 	void ShowAccountsList()
 	{
 		//SelectAccountsDialogをポップアップ表示する
-		Navigation.PushModalAsync(new Views.Settings.SelectAccountDialog());
+		Navigation.PushAsync(new Views.Settings.SelectAccountDialog());
 	}
 
 }
