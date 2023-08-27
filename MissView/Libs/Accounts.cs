@@ -74,15 +74,29 @@ namespace MissView.Libs
 			Preferences.Set("LastUsedAccount", index);
 		}
 
-		public static int GetLastUsedAccount()
+		public static int GetLastUsedAccountIdx()
 		{
-			if (Microsoft.Maui.Storage.Preferences.ContainsKey("LastUsedAccount"))
+			if (Preferences.ContainsKey("LastUsedAccount"))
 			{
 				return Preferences.Get("LastUsedAccount", -1);
 			}
 			else
 			{
 				return -1;
+			}
+		}
+
+		public static Dictionary<string, string> GetLastUsedAccount()
+		{
+			if (Preferences.ContainsKey("LastUsedAccount"))
+			{
+				var Accounts = Preferences.Get("Accounts", "");
+				var AccountsJson = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, string>>>(Accounts);
+				return AccountsJson[Preferences.Get("LastUsedAccount", -1)];
+			}
+			else
+			{
+				return null;
 			}
 		}
 

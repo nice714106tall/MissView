@@ -72,7 +72,7 @@ public partial class SettingsPage : ContentPage
 				Text = "さらにアカウントを追加する"
 			};
 			AddMoreAccountButton.Clicked += async (sender, e) => await AddAccountButton_Clicked(sender, e);
-			settingsVerticalStackLayout.Children.Add(new Label { Text = "" });
+			settingsVerticalStackLayout.Children.Add(new Label { Text = " " });
 			settingsVerticalStackLayout.Children.Add(AddMoreAccountButton);
 		}
 		else

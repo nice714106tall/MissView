@@ -13,7 +13,7 @@ public partial class MainPage : ContentPage
 		Libs.AccountsIO acct = new();
 		if(Libs.AccountsIO.IsAccountsAvailable())
 		{
-			if(Libs.AccountsIO.GetLastUsedAccount() != -1)
+			if(Libs.AccountsIO.GetLastUsedAccountIdx() != -1)
 			{
 				//show timeline page
 				Navigation.PushAsync(new Views.Timeline.TimelinePage());
