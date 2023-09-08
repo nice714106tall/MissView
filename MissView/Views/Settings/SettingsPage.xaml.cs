@@ -19,6 +19,7 @@ public partial class SettingsPage : ContentPage
 			foreach (var Account in Accounts)
 			{
 				Frame acctInfo = new();
+				acctInfo.AutomationId = "acctInfo";
 
 				Label TitleLabel = new()
 				{
@@ -63,6 +64,7 @@ public partial class SettingsPage : ContentPage
 						DeleteButton
 					}
 				};
+
 				settingsVerticalStackLayout.Children.Add(new Label { Text = "現在、これらのアカウントが登録されています。" });
 				settingsVerticalStackLayout.Children.Add(acctInfo);
 
@@ -96,12 +98,37 @@ public partial class SettingsPage : ContentPage
 
 	async Task DeleteButton_Clicked(object sender, EventArgs e)
 	{
-		//削除の確認ダイアログを表示
-		var result = await DisplayAlert("確認", "アカウントを削除しますか？", "はい", "いいえ");
-		if (result)
+		//削除処理
+		//削除ボタンが押されたFrameのインデックスを取得
+
+		int index = settingsVerticalStackLayout.Children.IndexOf((View)sender);
+		if (index >= 0)
 		{
-			//削除処理
-			Debug.WriteLine("削除処理");
+			Dictionary<string, string> AccountToDelete = Libs.AccountsIO.ShowAccount(index);
+			string AccountToDeleteHostName = AccountToDelete["URL"].Replace("https://", "");
+			AccountToDeleteHostName = AccountToDeleteHostName.Replace("http://", "");
+			string AccountToDeleteText =
+				"[" + index + "]:" + AccountToDelete["InstanceName"] + "\n\n" +
+				"(@" + AccountToDelete["UserName"] + "@" + AccountToDeleteHostName + ")";
+
+			bool DeleteConfirmResult = await DisplayAlert("確認", "以下のアカウントを削除しますか？\n\n" + index + ":\n\n" + AccountToDelete, "OK", "キャンセル");
+			if (DeleteConfirmResult)
+			{
+				//AccountsIOのDeleteAccountメソッドを呼び出し、アカウントを削除
+				Libs.AccountsIO.DeleteAccount(index);
+				//settingsVerticalStackLayoutを空にする
+				settingsVerticalStackLayout.Children.Clear();
+				//LoadPreferencesメソッドを呼び出し、アカウント情報を再読み込み
+				LoadPreferences();
+			}
+			else
+			{
+				//キャンセルされたら何もしない
+			}
+		}
+		else
+		{
+			await DisplayAlert("エラー", "内部エラーが発生しました。\n\n(index=" + index + ")", "OK");
 		}
 	}
 	protected override void OnAppearing()

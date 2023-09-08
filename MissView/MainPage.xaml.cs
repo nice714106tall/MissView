@@ -1,4 +1,5 @@
-﻿namespace MissView;
+﻿using Microsoft.Maui.Controls.PlatformConfiguration;
+namespace MissView;
 
 public partial class MainPage : ContentPage
 {
